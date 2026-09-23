@@ -78,6 +78,9 @@ class ZenlessTask:
             data = res.json()
             if data.get('retcode') == 0:
                 roles = data.get('data', {}).get('list', [])
+                # 标准化角色字段：把 game_uid 转为 uid，方便统一使用
+                for role in roles:
+                    role['uid'] = role.get('game_uid') or role.get('uid')
                 if roles:
                     return roles
             logger.warning(f"获取游戏角色失败: {data.get('message')}")
