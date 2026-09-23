@@ -28,8 +28,8 @@
 
 | Secret 名称 | 说明 | 默认值 |
 |---|---|---|
-| `ACT_ID` | 签到活动 ID | `e202406031448091` |
-| `GAME_ID` | 游戏 ID | `4` |
+| `ACT_ID` | 签到活动 ID | `e202406242138391` |
+| `GAME_ID` | 游戏 ID | `nap_cn` |
 | `REGION` | 区服 | `prod_gf_cn` |
 
 ### 3. 启用 GitHub Actions

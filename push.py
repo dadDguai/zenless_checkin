@@ -16,7 +16,14 @@ def format_push_message(result):
 
     if user_info:
         nickname = user_info.get('nickname')
-        content.append(f"- **米游社昵称**: {nickname}")
+        level = user_info.get('level')
+        uid = user_info.get('uid')
+        role_line = f"{nickname}"
+        if level:
+            role_line += f" (Lv.{level})"
+        if uid:
+            role_line += f" UID:{uid}"
+        content.append(f"- **绝区零角色**: {role_line}")
     if sign_info:
         content.append(f"- **本月累计签到**: {sign_info.get('total', 0)} 天")
         content.append(f"- **今日已签到**: {'是' if sign_info.get('today') else '否'}")
