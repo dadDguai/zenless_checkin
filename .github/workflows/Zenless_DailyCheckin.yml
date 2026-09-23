@@ -2,7 +2,7 @@ name: Zenless Daily Checkin
 
 on:
   schedule:
-    - cron: '0 3 * * *'  # UTC时间每天3点执行(对应CST时间 11:00)
+    - cron: '30 2 * * *'  # UTC时间每天2:30触发(对应CST 10:30)，脚本内再随机等待0~30分钟
   workflow_dispatch:      # 支持手动触发
 
 jobs:
@@ -32,6 +32,7 @@ jobs:
           ACT_ID: ${{ secrets.ACT_ID }}
           GAME_ID: ${{ secrets.GAME_ID }}
           REGION: ${{ secrets.REGION }}
+          RANDOM_DELAY_MAX: ${{ secrets.RANDOM_DELAY_MAX }}
 
           # QQ 邮箱推送（可选，配置后签到结果会发到邮箱）
           SMTP_QQ_EMAIL: ${{ secrets.SMTP_QQ_EMAIL }}

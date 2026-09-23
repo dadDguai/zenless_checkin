@@ -1,5 +1,7 @@
 import os
 import sys
+import random
+import time
 from loguru import logger
 from zenless import ZenlessTask
 from push import format_push_message, send_to_email
@@ -25,7 +27,30 @@ def mask_string(s):
     return s[0] + '*' * (len(s) - 1)
 
 
+def random_delay():
+    """随机等待，避免固定时间点被风控。
+
+    通过环境变量 RANDOM_DELAY_MAX 控制最大等待分钟数（默认 30）。
+    设置为 0 则立即执行（不等待）。
+    """
+    try:
+        max_minutes = int(os.environ.get('RANDOM_DELAY_MAX') or 30)
+    except ValueError:
+        max_minutes = 30
+    if max_minutes <= 0:
+        logger.info("RANDOM_DELAY_MAX=0，不等待，立即执行。")
+        return
+    delay_seconds = random.randint(0, max_minutes * 60)
+    delay_min = delay_seconds // 60
+    delay_sec = delay_seconds % 60
+    logger.info(f"随机等待 {delay_min}分{delay_sec}秒 后再执行签到...")
+    time.sleep(delay_seconds)
+
+
 def main():
+    # 随机延迟（workflow cron 已提前触发，这里随机等待 0~30 分钟）
+    random_delay()
+
     cookie = os.environ.get('MIHOYO_COOKIE')
     if not cookie:
         logger.error('环境变量 MIHOYO_COOKIE 未设置，程序终止')
