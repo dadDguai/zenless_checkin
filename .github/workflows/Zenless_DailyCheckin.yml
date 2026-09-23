@@ -1,0 +1,43 @@
+name: Zenless Daily Checkin
+
+on:
+  schedule:
+    - cron: '0 3 * * *'  # UTC时间每天3点执行(对应CST时间 11:00)
+  workflow_dispatch:      # 支持手动触发
+
+jobs:
+  run-zenless-task:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install requests loguru
+
+      - name: Run Zenless Task
+        env:
+          # 必需的环境变量
+          MIHOYO_COOKIE: ${{ secrets.MIHOYO_COOKIE }}
+
+          # 可选的环境变量（有默认值，通常无需配置）
+          ACT_ID: ${{ secrets.ACT_ID }}
+          GAME_ID: ${{ secrets.GAME_ID }}
+          REGION: ${{ secrets.REGION }}
+
+          # QQ 邮箱推送（可选，配置后签到结果会发到邮箱）
+          SMTP_QQ_EMAIL: ${{ secrets.SMTP_QQ_EMAIL }}
+          SMTP_QQ_AUTHCODE: ${{ secrets.SMTP_QQ_AUTHCODE }}
+          SMTP_TO_EMAIL: ${{ secrets.SMTP_TO_EMAIL }}
+          SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+
+        run: python main.py
